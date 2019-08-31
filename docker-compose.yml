@@ -1,0 +1,20 @@
+version: '3.1'
+volumes:
+  pgvol:
+services:
+  db:
+    build: postgres
+    image: local/postgres-weather
+    restart: always
+    volumes: 
+      - "pgvol:/var/lib/postgresql/data"
+  dloader:
+    build: icon-downloader
+    image: local/weather-icon-downloader
+    restart: always
+  rest:
+    build: rest-service
+    image: local/rest
+    restart: always
+    ports:
+      - "80:5000"

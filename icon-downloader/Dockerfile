@@ -1,0 +1,12 @@
+FROM debian:buster-slim
+COPY wgrib2 download.sh /opt/icon/
+RUN apt-get update && apt-get -y install cron libgfortran4 libgomp1 curl postgresql-client
+RUN useradd icon -d /opt/icon && \
+    echo 'postgres:5432:wforecast:wforecast_app:wfapp' > /opt/icon/.pgpass &&\
+    chown -R icon:icon /opt/icon/ && \
+    chmod u+x /opt/icon/wgrib2 /opt/icon/download.sh &&\
+    echo '46 3,9,15,21 * * *       /opt/icon/download.sh'|crontab -u icon - 
+USER root
+WORKDIR /opt/icon
+CMD ["/usr/sbin/cron", "-f"]
+
