@@ -1,11 +1,11 @@
 import flask
 from flask import jsonify,request,render_template
 from src import weatherDAO 
-app = flask.Flask(__name__)
-app.config["DEBUG"] = False
+application = flask.Flask(__name__)
+application.config["DEBUG"] = False
 dbget = weatherDAO.Dbget()
 
-@app.route('/data', methods=['GET'])
+@application.route('/data', methods=['GET'])
 def data():
     lat=0
     lon=0
@@ -16,8 +16,8 @@ def data():
     resp = flask.make_response(jsonify(dbget.getWeatherData(lat,lon)))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
-@app.route('/',methods=['GET'])
+@application.route('/',methods=['GET'])
 def home():
     return render_template('/index.html')
-
-app.run(host='0.0.0.0')
+if __name__ == '__main__':
+    application.run(host='0.0.0.0')
