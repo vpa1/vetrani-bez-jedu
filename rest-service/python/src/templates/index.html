@@ -5,21 +5,34 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="https://api.mapy.cz/loader.js"></script>
-  <script>Loader.load()</script>
+  <script src="//console.re/connector.js" data-channel="try-327b-21e8-af40" id="consolerescript"></script>
+  <script>
+     Loader.load()  
+  </script>
   <title>Větrání bez jedů</title>
   <style>
+      @media (max-width: 1024px) {
+          .time-control {
+              width:80vw;
+          }
+      }
  html,
 body {
   position: fixed;
   overflow: visible;
   padding:0;
   margin:0;
+  -webkit-text-size-adjust: none;
+  touch-action: none;
 }
   .time-control {
-      background-color:white;
+      background-color:rgba(255,255,255,0.4);
       border-radius:5px;
       min-width:50px;
       min-height:50px;
+  }
+  #time-selector {
+      width:90%;
   }
 
 #wrapper {
@@ -37,39 +50,76 @@ height: 100vh;
     left:10px;
     position: absolute;
     z-index: 10;
+    background-color: rgba(255,255,255,0.4);
+    border-radius:5px;
+    padding: 5px;
 }
 #time-display {
+    position:absolute;
+    bottom:80px;
+    background-color:rgba(255,255,255,0.5);
+    border-radius:5px;
+    text-align: center; 
+    font-size:18pt;
+    right: 20px;
+    z-index:10;
     padding:5px;
+    font-weight: bold;   
   }
   </style>
 </head>
 <body>
 <div id="wrapper">
 <img id="logo" src="static/logo1.png">
-<div id="mapa"></div></div>
+<div id="mapa">
+<div id="time-display"></div>
+</div></div>
     <script type="text/javascript">
     $(document).ready(function() {
 $(window).resize(function() {
 $('#mapa').height = window.innerHeight
 })
 $(window).resize();
+$(document).on('touchmove', function(event) {
+        vrstva.redraw()
+        event = event.originalEvent || event;
+        if (event.scale != 1 || event.touches.length>1) {
+           event.preventDefault();
+        }
+    });
+$(document).on('touchend',function() {
+    console.re.log("touchend")
+    window.setTimeout(function() {vrstva.redraw()},500)
+})
+$(window).on('orientationchange',function() {
+    $('#mapa').height = window.innerHeight
+    $('#mapa').width = window.innerWidth
+
+})
 window.scroll(0,1)
         var stred = SMap.Coords.fromWGS84(18.29, 49.83);
-		var mapa = new SMap(JAK.gel("mapa"), stred, 13);
+		var mapa = new SMap(JAK.gel("mapa"), stred, 12);
 		mapa.addDefaultLayer(SMap.DEF_BASE).enable();
 		mapa.addDefaultControls();	     
 
 
         var vrstva = new SMap.Layer.Canvas(0,0);     /* Obrázková vrstva */
-
+        var znacky = new SMap.Layer.Marker();
+        mapa.addLayer(znacky)
         mapa.addLayer(vrstva);                      /* Přidat ji do mapy */
         vrstva.enable(); 
+        znacky.enable();
+        var source = SMap.Coords.fromWGS84(18.277, 49.858);
+            //49.7953294N, 18.3249392E
+        var source2 = SMap.Coords.fromWGS84(18.325, 49.795);
+        var source3 = SMap.Coords.fromWGS84(18.2905, 49.715);
+        var source4 = SMap.Coords.fromWGS84(18.329, 49.788);
         var drawSource = function (coords,range,bearing,speed,arcAngle,color) {
             var ctx = vrstva.getContext();
             ctx.beginPath();
-            if (speed<1) {
-                range=500;
-                arcAngle=360;
+            if (speed<0.5) {
+                range=1800;
+                arcAngle=45;
             }
             var pixel = coords.toPixel(mapa);
             var x = pixel.x+ctx.canvas.width/2
@@ -85,6 +135,24 @@ window.scroll(0,1)
             ctx.fillStyle=grad;
             ctx.fill();
         }
+        var drawSourceMarker = function(coords,title,header,body,footer) {
+            var card = new SMap.Card();
+            card.setSize(200, 200);
+            var options = { 
+                "title": title
+            };
+            var marker = new SMap.Marker(coords,"",options)
+            card.getHeader().innerHTML=header
+            card.getBody().innerHTML=body
+            card.getFooter().innerHTML=footer
+            marker.decorate(SMap.Marker.Feature.Card, card);
+            znacky.addMarker(marker)
+        }
+        drawSourceMarker(source,"Koksovna Svoboda","<b>Koksovna Svoboda</b>","Provozovatel: OKK Koksovny, s.r.o.<br>\
+        Benzo(a)pyren, benzen, PAU, PM10, PM2.5, As, HCN<br>\
+        <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/713760061_CZ.html\">EMIS</a><br>\
+        <a href=\"https://www.mzp.cz/ippc/ippc4.nsf/%24%24OpenDominoDocument.xsp?documentId=2E997BD30D84CB31C1257B82004D69F6&action=openDocument\">IPPC Portál</a><br>\
+        <a href=\"https://www.msk.cz/assets/temata/ippc/files/okk-koksovny---koksovna-svoboda.pdf\">Integrované povolení</a>","")
 $(window).resize(function () {
 $('#mapa').height(window.innerHeight);
 });
@@ -92,7 +160,7 @@ $(window).resize();
 window.scroll(0,1);
         var ctrl = new SMap.Control.Visible();
         ctrl.getContainer = function() {
-            return $('<div class="time-control"><input id="time-selector" type="range" min="0" max="78" value="0"><div id="time-display"></div></div>')[0];
+            return $('<div class="time-control"><input id="time-selector" type="range" min="0" max="78" value="0"></div>')[0];
         }
         mapa.addControl(ctrl,{right:"18px",bottom:"30px"});
         var selectorSlider = $('#time-selector');
@@ -118,19 +186,16 @@ window.scroll(0,1);
                 windspeed=data.speed[forecastHour]
                 var forecastDate=new Date(forecastRefDate);
                 forecastDate.setHours(forecastRefDate.getHours()+forecastHour)
-                timeDisplay.text(forecastDate.getDate()+". "+(forecastDate.getMonth()+1)+". "+forecastDate.getHours()+ ":00");
+		    timeDisplay.html(forecastDate.getDate()+". "+(forecastDate.getMonth()+1)+".<br> "+forecastDate.getHours()+ ":00");
                 vrstva.redraw()
         })
         }
         getForecastData();
         vrstva.redraw=function(full){
+            console.re.log("redraw")
             var ctx = vrstva.getContext()
+            ctx.canvas.style.border="1px solid"
             vrstva.removeAll()
-            var source = SMap.Coords.fromWGS84(18.277, 49.858);
-            //49.7953294N, 18.3249392E
-            var source2 = SMap.Coords.fromWGS84(18.325, 49.795);
-            var source3 = SMap.Coords.fromWGS84(18.2905, 49.715);
-            var source4 = SMap.Coords.fromWGS84(18.329, 49.788);
             //49.7880272N, 18.3290719E
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
             if(ctx.canvas.offsetParent!=null) {
