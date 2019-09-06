@@ -1,10 +1,11 @@
 #!/bin/bash
 DATE=`date +%Y%m%d`
-TIME=`date +%H%m`
+TIME=`date +%H%M`
 POSTGRES_HOSTNAME=db
 OUTDIR=`mktemp -d`
 die() { echo "$*" 1>&2 ; exit 1; }
 #calculate the closest complete run
+echo $TIME
 if [ "$TIME" -lt "0345" ]; then 
     REFDATE=`date +%Y%m%d -d yesterday`
     REFTIME="18"
