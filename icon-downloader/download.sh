@@ -6,27 +6,50 @@ OUTDIR=`mktemp -d`
 die() { echo "$*" 1>&2 ; exit 1; }
 #calculate the closest complete run
 echo $TIME
-if [ "$TIME" -lt "0345" ]; then 
+#Forecast type - 78 hours or 30 hours
+HOURS=
+if [ "$TIME" -lt "0045" ]; then 
     REFDATE=`date +%Y%m%d -d yesterday`
+    HOURS=78
     REFTIME="18"
+elif [ "$TIME" -lt "0345" ]; then
+    REFDATE=$DATE
+    HOURS=30
+    REFTIME="21"
+elif [ "$TIME" -lt "0645" ]; then
+    REFDATE=$DATE
+    HOURS=78
+    REFTIME="00"
 elif [ "$TIME" -lt "0945" ]; then
     REFDATE=$DATE
-    REFTIME="00"
+    HOURS=30
+    REFTIME="03"
+elif [ "$TIME" -lt "1245" ]; then
+    REFDATE=$DATE
+    HOURS=78
+    REFTIME="06"
 elif [ "$TIME" -lt "1545" ]; then
     REFDATE=$DATE
-    REFTIME="06"
+    HOURS=30
+    REFTIME="09"
+elif [ "$TIME" -lt "1845" ]; then
+    REFDATE=$DATE
+    HOURS=78
+    REFTIME="12"
 elif [ "$TIME" -lt "2145" ]; then
     REFDATE=$DATE
-    REFTIME="12"
+    HOURS=30
+    REFTIME="15"
 else 
     REFDATE=$DATE
+    HOURS=78
     REFTIME="18"
 fi
 
 
 #download the latest run datum
 #Download and process all the requested data into csv
-for i in {0..78}; do 
+for ((i=0; i<=$HOURS; i++)); do 
     printf -v TIMEPOS "%03d" $i
     CSVU=$OUTDIR/$REFDATE$REFTIME\_$TIMEPOS\_U_10M.csv
     CSVV=$OUTDIR/$REFDATE$REFTIME\_$TIMEPOS\_V_10M.csv

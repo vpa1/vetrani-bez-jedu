@@ -27,6 +27,8 @@ class Dbget:
       ps_connection = self.postgreSQL_pool.getconn()
       if(ps_connection):
         curr = ps_connection.cursor()
+        curr.execute("SELECT to_json(max(startdate))FROM forecast_table where lat=%s AND lon=%s",[lat,lon])
+        stdaterec=curr.fetchone()
         curr.execute("SELECT to_json(forecast_date),wind_speed,wind_direction from forecast_table where lat=%s AND lon=%s ORDER BY forecast_date",[lat,lon])
         records = curr.fetchall()
         outrecs = {"speed":[],"direction":[]}
@@ -37,6 +39,7 @@ class Dbget:
             firstrec=False
           outrecs.get("speed").append(i[1])
           outrecs.get("direction").append(i[2])
+        outrecs["latestforecast"]=stdaterec[0]
         return outrecs
 
     except (Exception):

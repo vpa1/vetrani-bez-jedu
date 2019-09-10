@@ -24,10 +24,10 @@ var drawSourceMarker = function(coords,title,header,body,footer) {
 }
 var getForecastData = function (forecastHour) {
     if (!$.isEmptyObject(cacheddata)) {
-        forecastRefDate=new Date(cacheddata.refdate)
+        forecastRefDate=new Date(cacheddata.latestforecast)
         var dateDif = new Date()-forecastRefDate;
     }
-    if (dateDif>(10*3600*1000) || $.isEmptyObject(cacheddata)) {
+    if (dateDif>(7*3600*1000) || $.isEmptyObject(cacheddata)) {
         jQuery.getJSON("data?lat=49.8313933&lon=18.2738400").then(function (data) {
             cacheddata=data;
             applyForecastData(data,forecastHour);
@@ -126,6 +126,9 @@ $(document).on('touchmove', function(event) {
 $(document).on('touchend',function() {
     window.setTimeout(function() {vrstva.redraw()},500)
 })
+$("#back-button").click(function() {
+    getForecastData(null);
+})
         window.scroll(0,1)
       
         var windspeed;
@@ -133,7 +136,7 @@ $(document).on('touchend',function() {
         var cacheddata={};
         var getDayStr = function(forecastDate) {
           var now = new Date();
-		  var todayStart = new Date(now.getFullYear(),now.getMonth(),now.getDay()+1,0,0,0,0);
+		  var todayStart = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0);
           if ((forecastDate.getTime()-todayStart.getTime()<0)) {
             daystr="Včera";
           }
@@ -149,8 +152,8 @@ $(document).on('touchend',function() {
           return daystr;
         }
         var applyForecastData = function(data,forecastHour) {
-            if (forecastHour==null) {
-                    forecastRefDate=new Date(data.refdate)
+                forecastRefDate=new Date(data.refdate)
+                if (forecastHour==null) {
                     var dateDif = new Date()-forecastRefDate;
                     var currentForecastHour = Math.floor(dateDif/60000/60);
                     winddir=data.direction[currentForecastHour]
@@ -160,6 +163,7 @@ $(document).on('touchend',function() {
                 }
                 winddir=data.direction[forecastHour]
                 windspeed=data.speed[forecastHour]
+                selectorSlider.attr("max",data.speed.length-1)
                 var forecastDate=new Date(forecastRefDate);
                 forecastDate.setHours(forecastRefDate.getHours()+forecastHour)
 		        var daystr=getDayStr(forecastDate);

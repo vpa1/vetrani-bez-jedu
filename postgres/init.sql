@@ -16,9 +16,10 @@ CREATE FUNCTION fill_forecasts() RETURNS void AS $$
 DECLARE
     row RECORD;
 BEGIN
-    TRUNCATE TABLE forecast_table;
+    delete from forecast_table where forecast_date < now() - interval '12 hours';
     FOR row IN select st1.comp_date,st1.forecast_date,st1.lat,st1.lon,st1.val uval,st2.val vval from stage st1 left join stage st2 ON (st2.forecast_date=st1.forecast_date AND st1.lat=st2.lat AND st1.lon=st2.lon AND st2.field='"VGRD"')  WHERE st1.field='"UGRD"' LOOP
-        INSERT INTO forecast_table VALUES(row.forecast_date::timestamp AT TIME ZONE 'UTC',row.lat,row.lon,row.comp_date::timestamp AT TIME ZONE 'UTC',SQRT(row.uval^2+row.vval^2),ATAN2(-row.uval,-row.vval)*180/PI() );
+        INSERT INTO forecast_table VALUES(row.forecast_date::timestamp AT TIME ZONE 'UTC',row.lat,row.lon,row.comp_date::timestamp AT TIME ZONE 'UTC',SQRT(row.uval^2+row.vval^2),ATAN2(-row.uval,-row.vval)*180/PI() )
+        ON CONFLICT (forecast_date,lat,lon) DO UPDATE SET startdate=row.comp_date::timestamp AT TIME ZONE 'UTC',wind_speed=SQRT(row.uval^2+row.vval^2),wind_direction=ATAN2(-row.uval,-row.vval)*180/PI() WHERE forecast_table.forecast_date = row.forecast_date::timestamp AT TIME ZONE 'UTC' AND forecast_table.lat=row.lat AND forecast_table.lon=row.lon;
     END LOOP;
     TRUNCATE TABLE stage;
 END;
