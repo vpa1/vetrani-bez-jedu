@@ -4,13 +4,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet"> 
+<link href="static/css/all.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="https://api.mapy.cz/loader.js"></script>
   <script src="//console.re/connector.js" data-channel="try-327b-21e8-af40" id="consolerescript"></script>
   <script>
      Loader.load()  
   </script>
-  <title>Větrání bez jedů</title>
+  <title>Větrání bez jedů | Piráti Ostrava</title>
   <style>
       @media (max-width: 1024px) {
           .time-control {
@@ -61,17 +62,23 @@ touch-action: none;
 }
 #time-display {
     position:absolute;
-    bottom:80px;
+    bottom:71px;
     background-color:rgba(255,255,255,0.5);
     border-radius:5px;
     text-align: center; 
     font-size:18pt;
-    right: 10vw;
+    right: 15vw;
     font-family: 'Roboto Condensed', sans-serif;
     font-weight:700;
     z-index:10;
     padding:5px;
   }
+#back-button {
+  position:absolute;
+  bottom:71px;
+  right:5vw;
+  z-index:11;
+}
   input[type=range] {
   -webkit-appearance: none;
   width: 100%;
@@ -174,6 +181,7 @@ $(document).ready(function() {
 <div id="mapa">
 </div>
 <div id="time-display"></div>
+<button id="back-button"><i class="fas fa-undo"></i></button>
 </div>
 </body>
 </html>
