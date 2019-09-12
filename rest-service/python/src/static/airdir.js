@@ -8,6 +8,8 @@ var source = SMap.Coords.fromWGS84(18.277, 49.858);
 var source2 = SMap.Coords.fromWGS84(18.325, 49.795);
 var source3 = SMap.Coords.fromWGS84(18.2905, 49.715);
 var source4 = SMap.Coords.fromWGS84(18.329, 49.788);
+var source5 = SMap.Coords.fromWGS84(18.2372514, 49.8470731);
+var source6 = SMap.Coords.fromWGS84(18.2522781, 49.8408575);
 var mapa,vrstva,winddir,windspeed,znacky,selectorSlider,timedisplay;
 var drawSourceMarker = function(coords,title,header,body,footer) {
     var card = new SMap.Card();
@@ -73,7 +75,19 @@ var redrawfunc=function(full){
     drawSource(source,3800,winddir,windspeed,15,"red");
     drawSource(source2,3800,winddir,windspeed,15,"red");
     drawSource(source4,3800,winddir,windspeed,15,"red");
+    drawSource(source5,2000,winddir,windspeed,15,"orange");
+    drawSource(source6,2000,winddir,windspeed,15,"orange");
     //drawSource(source3,10000,189,15,"orange");
+}
+var loadContent = function(filename) {
+    jQuery.get("static/"+filename).then(function(data){
+        converter = new showdown.Converter()
+        $("#content-div").html(converter.makeHtml(data));
+        $("#content-container").show();
+    })
+}
+var closeContent=function() {
+    $("#content-container").hide();
 }
 $(window).on("orientationchange",function() {
     $(window).resize()
@@ -95,10 +109,37 @@ $(window).resize(function() {
         vrstva = new SMap.Layer.Canvas(0,0);
         znacky = new SMap.Layer.Marker();
         drawSourceMarker(source,"Koksovna Svoboda","<b>Koksovna Svoboda</b>","Provozovatel: OKK Koksovny, a. s.<br>\
+        Kapacita: 840 tis. t. CKS/rok<br>\
         Benzo(a)pyren, benzen, PAU, PM10, PM2.5, As, HCN<br>\
+        <a href=\"https://www.ceskatelevize.cz/ivysilani/1095913550-nedej-se/418235100161012-jedy-z-koksaren\">Dokument ČT Jedy z koksáren</a><br>\
         <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/713760061_CZ.html\">EMIS</a><br>\
-        <a href=\"https://www.mzp.cz/ippc/ippc4.nsf/%24%24OpenDominoDocument.xsp?documentId=2E997BD30D84CB31C1257B82004D69F6&action=openDocument\">IPPC Portál</a><br>\
         <a href=\"https://www.msk.cz/assets/temata/ippc/files/okk-koksovny---koksovna-svoboda.pdf\">Integrované povolení</a>","")
+
+        drawSourceMarker(source2,"Koksovna Liberty Steel (KB1+2)","<b>Koksovna Liberty Ostrava (KB1+2)</b>","Provozovatel: Liberty Ostrava, a. s.<br>\
+        Kapacita: 756 tis. t CKS/rok<br>\
+        Benzo(a)pyren, benzen, PAU, PM10, PM2.5, As, HCN, zápach<br>\
+        <a href=\"https://ct24.ceskatelevize.cz/domaci/2782736-ostrava-nebo-otrava-bydlite-v-radvanicich-no-tak-co-chcete-rekl-lekar-zene-s\">TV reportáž</a><br>\
+        <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/714220261_CZ.html\">EMIS</a><br>\
+        <a href=\"https://www.msk.cz/assets/temata/ippc/files/amo---zavod-10---koksovna.pdf\">Integrované povolení</a>","")
+
+        drawSourceMarker(source4,"Koksovna Liberty Steel (VKB11)","<b>Koksovna Liberty Ostrava (VKB11)</b>","Provozovatel: Liberty Ostrava, a. s.<br>\
+        Kapacita: 775 tis. t CKS/rok<br>\
+        Benzo(a)pyren, benzen, PAU, PM10, PM2.5, As, HCN, zápach<br>\
+        <a href=\"https://ct24.ceskatelevize.cz/domaci/2782736-ostrava-nebo-otrava-bydlite-v-radvanicich-no-tak-co-chcete-rekl-lekar-zene-s\">TV reportáž</a><br>\
+        <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/714220261_CZ.html\">EMIS</a><br>\
+        <a href=\"https://www.msk.cz/assets/temata/ippc/files/amo---zavod-10---koksovna.pdf\">Integrované povolení</a>","")
+
+        drawSourceMarker(source5,"BC-MCHZ - výroba velkoobjemových chemikálií","<b>BC-MCHZ - výroba velkoobjemových chemikálií</b>","Provozovatel: BorsodChem MCHZ‚ s.r.o.<br>\
+        Kapacita: 165 tis. t anilinu/rok<br>\
+        Benzen, VOC, NO<sub>x</sub>, TZL, NH<sub>3</sub>, zápach<br>\
+        <a href=\"https://mrak.pirati.cz/s/z43AT4swp8goLFi\">Zpráva ČHMÚ o zdrojích benzenu v Ostravě</a><br>\
+        <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/713830731_CZ.html\">EMIS</a><br>\
+        <a href=\"https://www.msk.cz/assets/temata/ippc/files/borsodchem---zarizeni-na-vyrobu-velkoobjemovych-chem.pdf\">Integrované povolení</a>","")
+
+        drawSourceMarker(source6,"Laguny Ostramo","<b>Laguny Ostramo</b>","\
+        VOC, benzen<br>\
+        <a href=\"https://mrak.pirati.cz/s/z43AT4swp8goLFi\">Zpráva ČHMÚ o zdrojích benzenu v Ostravě</a><br>\
+        <a href=\"https://www.msk.cz/assets/temata/ippc/files/ave-cz---napravna-opatreni-_-laguny-ostramo.pdf\">Integrované povolení</a>","")
         mapa.addLayer(znacky)
         mapa.addLayer(vrstva);                      /* Přidat ji do mapy */
         timedisplay=$("#time-display")
@@ -128,6 +169,12 @@ $(document).on('touchend',function() {
 })
 $("#back-button").click(function() {
     getForecastData(null);
+})
+$("#content-buttons a").click(function(e) {
+    loadContent($(e.delegateTarget).data("content"))
+})
+$("#content-close a").click(function() {
+    closeContent()
 })
         window.scroll(0,1)
       
