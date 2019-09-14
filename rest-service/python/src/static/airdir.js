@@ -219,7 +219,7 @@ $("#content-close a").click(function() {
         var getDayStr = function(forecastDate) {
           var now = new Date();
 		  var todayStart = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0,0);
-          if ((forecastDate.getTime()-todayStart.getTime()<0)) {
+          if ((forecastDate.getTime()-todayStart.getTime()<0) && (forecastDate.getTime()-todayStart.getTime()>-24*3600000)) {
             daystr="Včera";
           }
           else if ((forecastDate.getTime()-todayStart.getTime()<24*3600000)) {
