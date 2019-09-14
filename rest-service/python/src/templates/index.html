@@ -120,6 +120,8 @@ touch-action: none;
 }
 #content-buttons a {
 	text-decoration: none;
+  text-align:center;
+  margin-bottom:1ex;
 	color: black;
 	display: block;
 	border: 1px solid;
@@ -252,6 +254,7 @@ $(document).ready(function() {
   <div id="content-cdiv"><div id="content-div"></div></div></div>
 <div id="content-buttons">
   <a href="#" data-content="info.md">O aplikaci</a>
+  <a href="#" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),'facebook-share-dialog','width=626,height=436');return false;"><i class="fab fa-facebook-square"></i> Sdílet</a>
 </div>
 </div>
 </body>

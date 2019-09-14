@@ -204,7 +204,9 @@ $("#back-button").click(function() {
     getForecastData(null);
 })
 $("#content-buttons a").click(function(e) {
-    loadContent($(e.delegateTarget).data("content"))
+    if ($(e.delegateTarget).data("content") !== undefined) {
+        loadContent($(e.delegateTarget).data("content"))
+    }
 })
 $("#content-close a").click(function() {
     closeContent()
