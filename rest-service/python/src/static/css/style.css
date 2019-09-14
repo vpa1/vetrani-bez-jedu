@@ -24,6 +24,10 @@ z-index:10;
 }
 .card {
 font-family: 'Roboto Condensed', sans-serif;
+z-index:13;
+}
+.smap > div {
+    z-index:unset;
 }
 #wrapper {
 overflow-y: hidden;
