@@ -172,7 +172,7 @@ $(window).resize(function() {
         znacky = new SMap.Layer.Marker(); 
         for (i in sourceList) {
             source=sourceList[i];
-            drawSourceMarker(SMap.Coords.fromWGS84(source.lat,source.lon),source.label,"<b>"+source.header+"</b>",source.body,"",znacky)
+            drawSourceMarker(SMap.Coords.fromWGS84(source.lat,source.lon),source.label,"<b>"+source.label+"</b>",source.body,"",znacky)
         }
         mapa.addLayer(znacky)
         mapa.addLayer(vrstva);                      /* Přidat ji do mapy */
