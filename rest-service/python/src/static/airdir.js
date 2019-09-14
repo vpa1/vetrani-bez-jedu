@@ -3,14 +3,22 @@ var airdir=function() {
         console.re.log(event.originalEvent.currentTarget.className)
             event.preventDefault();
     })
-var source = SMap.Coords.fromWGS84(18.277, 49.858);
+var sourceList = [
+    {lat:18.277,lon:49.858,dist:3800,color:"red"},
+    {lat:18.325,lon:49.795,dist:3800,color:"red"},
+    {lat:18.329,lon:49.788,dist:3800,color:"red"},
+    {lat:18.2372514,lon:49.8470731,dist:2000,color:"orange"},
+    {lat:18.2522781,lon:49.8408575,dist:2000,color:"orange"}
+]
+var currentWindData={};
+var source1 = SMap.Coords.fromWGS84(18.277, 49.858);
     //49.7953294N, 18.3249392E
 var source2 = SMap.Coords.fromWGS84(18.325, 49.795);
 var source3 = SMap.Coords.fromWGS84(18.2905, 49.715);
 var source4 = SMap.Coords.fromWGS84(18.329, 49.788);
 var source5 = SMap.Coords.fromWGS84(18.2372514, 49.8470731);
 var source6 = SMap.Coords.fromWGS84(18.2522781, 49.8408575);
-var mapa,vrstva,winddir,windspeed,znacky,selectorSlider,timedisplay;
+var mapa,vrstva,znacky,selectorSlider,timedisplay;
 var drawSourceMarker = function(coords,title,header,body,footer) {
     var card = new SMap.Card();
     card.setSize(200, 300);
@@ -24,15 +32,41 @@ var drawSourceMarker = function(coords,title,header,body,footer) {
     marker.decorate(SMap.Marker.Feature.Card, card);
     znacky.addMarker(marker)
 }
+var getForecastPoints = function() {
+    var mappedSources={}
+    for (i in sourceList) {
+        var roundLat= Math.round(sourceList[i].lat/0.0625)*0.0625;
+        var roundLon= Math.round(sourceList[i].lon/0.0625)*0.0625;
+        mappedSources[roundLat+";"+roundLon]={"lat":roundLat,"lon":roundLon};
+    }
+    return mappedSources;
+    //ask for forecast on all node points and fill them in cacheable structure
+    //applyforecastdata then should apply structure and draw all the sources
+}
 var getForecastData = function (forecastHour) {
     if (!$.isEmptyObject(cacheddata)) {
         forecastRefDate=new Date(cacheddata.latestforecast)
         var dateDif = new Date()-forecastRefDate;
     }
     if (dateDif>(7*3600*1000) || $.isEmptyObject(cacheddata)) {
-        jQuery.getJSON("data?lat=49.8313933&lon=18.2738400").then(function (data) {
-            cacheddata=data;
-            applyForecastData(data,forecastHour);
+
+        var forecastPoints=getForecastPoints();
+        var forecastKeys = Object.keys(forecastPoints);
+        var dataobj={}
+        var defereds=[]
+        for (i in forecastKeys) {
+            (function () {
+            var ctx=forecastKeys[i];
+            defereds.push(jQuery.getJSON("data?lon="+forecastPoints[forecastKeys[i]].lat+"&lat="+forecastPoints[forecastKeys[i]].lon).then(function (data){
+                dataobj[ctx]=data;
+                dataobj["latestforecast"]=data["latestforecast"]
+                dataobj["refdate"]=data["refdate"]
+            }));
+             })()
+        };
+        jQuery.when.apply($,defereds).then(function() {//When everything downloaded, we can apply
+            applyForecastData(dataobj,forecastHour)
+            cacheddata=dataobj
         })
     }
     else {
@@ -61,6 +95,11 @@ var drawSource = function (coords,range,bearing,speed,arcAngle,color) {
     ctx.fillStyle=grad;
     ctx.fill();
 }
+var getCurrentWindParams = function(lat,lon) {
+    var roundLat= Math.round(lat/0.0625)*0.0625;
+    var roundLon= Math.round(lon/0.0625)*0.0625;
+    return currentWindData[roundLat+";"+roundLon];
+}
 var redrawfunc=function(full){
     var ctx = vrstva.getContext()
     vrstva.removeAll()
@@ -71,12 +110,19 @@ var redrawfunc=function(full){
         ctx.canvas.style.top=(-parseInt(ctx.canvas.offsetParent.style.top))+"px"
     }
     //49.8583478N, 18.2769303E
+    for (i in sourceList) {
+        source=sourceList[i];
+        var windParams=getCurrentWindParams(source.lat,source.lon);
+        if (windParams!==undefined) {
+            drawSource(SMap.Coords.fromWGS84(source.lat,source.lon),source.dist,windParams.direction,windParams.speed,15,source.color)
+        }
+    }
     //49.7153828N, 18.2905747E
-    drawSource(source,3800,winddir,windspeed,15,"red");
+    /*drawSource(source,3800,winddir,windspeed,15,"red");
     drawSource(source2,3800,winddir,windspeed,15,"red");
     drawSource(source4,3800,winddir,windspeed,15,"red");
     drawSource(source5,2000,winddir,windspeed,15,"orange");
-    drawSource(source6,2000,winddir,windspeed,15,"orange");
+    drawSource(source6,2000,winddir,windspeed,15,"orange");*/
     //drawSource(source3,10000,189,15,"orange");
 }
 var loadContent = function(filename) {
@@ -104,11 +150,11 @@ $(window).resize(function() {
         stred = SMap.Coords.fromWGS84(18.29, 49.83);
     }
         mapa = new SMap(JAK.gel("mapa"), stred, 12);
-		mapa.addDefaultLayer(SMap.DEF_BASE).enable();
+		mapa.addDefaultLayer(SMap.DEF_TURIST).enable();
 		mapa.addDefaultControls();	     
         vrstva = new SMap.Layer.Canvas(0,0);
         znacky = new SMap.Layer.Marker();
-        drawSourceMarker(source,"Koksovna Svoboda","<b>Koksovna Svoboda</b>","Provozovatel: OKK Koksovny, a. s.<br>\
+        drawSourceMarker(source1,"Koksovna Svoboda","<b>Koksovna Svoboda</b>","Provozovatel: OKK Koksovny, a. s.<br>\
         Kapacita: 840 tis. t. CKS/rok<br>\
         Benzo(a)pyren, benzen, PAU, PM10, PM2.5, As, HCN<br>\
         <a href=\"https://www.ceskatelevize.cz/ivysilani/1095913550-nedej-se/418235100161012-jedy-z-koksaren\">Dokument ČT Jedy z koksáren</a><br>\
@@ -156,7 +202,6 @@ $(window).resize(function() {
     
     console.re.log("resize logged w="+window.innerWidth+" h="+window.innerHeight)
 })
-$(window).resize();
 $(document).on('touchmove', function(event) {
         vrstva.redraw()
         event = event.originalEvent || event;
@@ -203,20 +248,34 @@ $("#content-close a").click(function() {
                 if (forecastHour==null) {
                     var dateDif = new Date()-forecastRefDate;
                     var currentForecastHour = Math.floor(dateDif/60000/60);
-                    winddir=data.direction[currentForecastHour]
-                    windspeed=data.speed[currentForecastHour]
+                    Object.keys(data).forEach(function(key) {
+                        if (key=="latestforecast"){return;}
+                        if (key=="refdate"){return;}
+                        var value=data[key]
+                        var winddir=value.direction[currentForecastHour]
+                        var windspeed=value.speed[currentForecastHour]
+                        currentWindData[key]={"speed":windspeed,"direction":winddir}
+                    })
+                   
                     selectorSlider.val(currentForecastHour);
                     forecastHour=currentForecastHour;
                 }
-                winddir=data.direction[forecastHour]
-                windspeed=data.speed[forecastHour]
-                selectorSlider.attr("max",data.speed.length-1)
+                Object.keys(data).forEach(function(key) {
+                        if (key=="latestforecast"){return;}
+                        if (key=="refdate"){return;}
+                    var value=data[key]
+                    var winddir=value.direction[forecastHour]
+                    var windspeed=value.speed[forecastHour]
+                    currentWindData[key]={"speed":windspeed,"direction":winddir}
+                    selectorSlider.attr("max",value.speed.length-1)
+                })
                 var forecastDate=new Date(forecastRefDate);
                 forecastDate.setHours(forecastRefDate.getHours()+forecastHour)
 		        var daystr=getDayStr(forecastDate);
 		        timedisplay.html(daystr+"<br> "+forecastDate.getHours()+ ":00");
                 vrstva.redraw()
         }
+$(window).resize();
      
         
 }
