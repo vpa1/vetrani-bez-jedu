@@ -1,6 +1,5 @@
 var airdir=function() {
     $("#mapa").on("touchmove",function(event) {
-        console.re.log(event.originalEvent.currentTarget.className)
             event.preventDefault();
     })
 var sourceList = [
@@ -188,7 +187,6 @@ $(window).resize(function() {
         vrstva.redraw()
     
     
-    console.re.log("resize logged w="+window.innerWidth+" h="+window.innerHeight)
 })
 $(document).on('touchmove', function(event) {
         vrstva.redraw()
