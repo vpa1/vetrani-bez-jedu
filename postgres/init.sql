@@ -4,7 +4,7 @@ create database wforecast owner wforecast;
 grant connect on DATABASE wforecast to wforecast_app;
 \connect wforecast
 
-create table stage (comp_date VARCHAR,forecast_date VARCHAR,field VARCHAR,level VARCHAR,lon FLOAT,lat FLOAT,val FLOAT);
+create table stage (comp_date VARCHAR,forecast_date VARCHAR,field VARCHAR,level VARCHAR,lat FLOAT,lon FLOAT,val FLOAT);
 grant all on stage to wforecast_app;
 
 create table forecast_table (forecast_date TIMESTAMP WITH TIME ZONE, lat FLOAT, lon FLOAT, startdate TIMESTAMP WITH TIME ZONE, wind_speed FLOAT,wind_direction FLOAT, PRIMARY KEY (forecast_date,lat,lon));

@@ -72,7 +72,7 @@ var getForecastData = function (forecastHour) {
         for (i in forecastKeys) {
             (function () {
             var ctx=forecastKeys[i];
-            defereds.push(jQuery.getJSON("data?lon="+forecastPoints[forecastKeys[i]].lat+"&lat="+forecastPoints[forecastKeys[i]].lon).then(function (data){
+            defereds.push(jQuery.getJSON("data?lat="+forecastPoints[forecastKeys[i]].lat+"&lon="+forecastPoints[forecastKeys[i]].lon).then(function (data){
                 dataobj[ctx]=data;
                 dataobj["latestforecast"]=data["latestforecast"]
                 dataobj["refdate"]=data["refdate"]
