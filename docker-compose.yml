@@ -13,6 +13,8 @@ services:
     image: local/weather-icon-downloader
     restart: always
   rest:
+    environment: 
+      - WEB_CONCURRENCY=4
     build: rest-service
     image: local/rest
     restart: always
