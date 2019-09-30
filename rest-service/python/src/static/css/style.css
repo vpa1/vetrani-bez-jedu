@@ -86,6 +86,9 @@ padding-left: 10px;
 padding-right: 10px;
 padding-bottom: 60px;
 }
+#content-div a {
+color:black;
+}
 #content-cdiv {
 overflow-y: auto;
 height:100%;
