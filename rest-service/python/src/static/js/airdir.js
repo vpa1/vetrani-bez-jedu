@@ -209,6 +209,11 @@ $("#content-buttons a").click(function(e) {
 $("#content-close a").click(function() {
     closeContent()
 })
+$(document).keyup(function(event){
+    if (event.originalEvent.key === "Escape") { // escape key maps to keycode `27`
+    closeContent()
+    }
+})
         window.scroll(0,1)
       
         var windspeed;
