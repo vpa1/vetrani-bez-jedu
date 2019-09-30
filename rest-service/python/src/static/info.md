@@ -18,4 +18,4 @@ Data jsou poskytována bez záruky, vzhledem k tomu, že se jedná o modelová d
 
 # O autorech
 
-Provozovatelem aplikace je Krajský expertní tým životního prostředí při krajském sdružení Pirátské strany v Moravskoslezském kraji. Autorem kódu a odborným garantem je Václav Parchaňský, politickým garantem je místostarosta obvodu Moravská Ostrava a Přívoz Rostislav Řeha.
+Provozovatelem aplikace je Krajský expertní tým životního prostředí při [krajském sdružení Pirátské strany v Moravskoslezském kraji](https://moravskoslezsky.pirati.cz). Autorem kódu a odborným garantem je Václav Parchaňský, politickým garantem je místostarosta obvodu Moravská Ostrava a Přívoz [Rostislav Řeha](https://ostrava.pirati.cz/lide/rostislav-reha/).
