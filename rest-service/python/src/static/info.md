@@ -16,6 +16,6 @@ K zobrazování dat předpovědí směru větru používáme data z předpovědn
 
 Data jsou poskytována bez záruky, vzhledem k tomu, že se jedná o modelová data, při určitých povětrnostních situacích (bouřka, ...) dochází k rozporu těchto data skutečnosti, což je třeba brát na vědomí.
 
-# O autorech
+# Kontakt
 
-Provozovatelem aplikace je Krajský expertní tým životního prostředí při [krajském sdružení Pirátské strany v Moravskoslezském kraji](https://moravskoslezsky.pirati.cz). Autorem kódu a odborným garantem je Václav Parchaňský, politickým garantem je místostarosta obvodu Moravská Ostrava a Přívoz [Rostislav Řeha](https://ostrava.pirati.cz/lide/rostislav-reha/).
+Provozovatelem aplikace je Krajský expertní tým životního prostředí při [krajském sdružení Pirátské strany v Moravskoslezském kraji](https://moravskoslezsky.pirati.cz). Autorem kódu a odborným garantem je Václav Parchaňský, politickým garantem je místostarosta obvodu Moravská Ostrava a Přívoz [Rostislav Řeha](https://ostrava.pirati.cz/lide/rostislav-reha/). Podněty a připomínky prosím zasílejte na mail [vetrani@chemici.eu](mailto:vetrani@chemici.eu).
