@@ -30,15 +30,25 @@ var sourceList = [
     {lat:18.2522781,lon:49.8408575,dist:2000,color:"orange",label:"Laguny Ostramo",body:"\
     VOC, benzen<br>\
     <a href=\"https://mrak.pirati.cz/s/z43AT4swp8goLFi\">Zpráva ČHMÚ o zdrojích benzenu v Ostravě</a><br>\
-    <a href=\"https://www.msk.cz/assets/temata/ippc/files/ave-cz---napravna-opatreni-_-laguny-ostramo.pdf\">Integrované povolení</a>"}
+    <a href=\"https://www.msk.cz/assets/temata/ippc/files/ave-cz---napravna-opatreni-_-laguny-ostramo.pdf\">Integrované povolení</a>"},
+    {lon:49.7142186,lat:18.2897936,dist:10800,color:"#996600",markerColor:"yellow",label:"Biocel Paskov - zdroj zápachu",body:"\
+    <b>obtěžování zápachem</b>, TZL, VOC, NO<sub>x</sub>, SO<sub>2</sub><br>\
+    <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/718210271_CZ.html\">EMIS</a><br>\
+    <a href=\"https://www.msk.cz/assets/temata/ippc/files/biocel-paskov---vyroba-sulfitove-buniciny.pdf\">Integrované povolení</a>\
+    "},
+    {lon:49.8432136,lat:18.2332742,dist:1800,color:"#996600",markerColor:"yellow",label:"Kompostárna INGEA Recyklace - zdroj zápachu",body:"\
+    <b>obtěžování zápachem</b><br>\
+    <a href=\"https://www.msk.cz/assets/zivotni_prostredi/ingea-recyklace----zavod-pro-zpracovani-bro.pdf\">Integrované povolení</a>\
+    "}
 ]
 var currentWindData={};
 var mapa,vrstva,znacky,selectorSlider,timedisplay;
-var drawSourceMarker = function(coords,title,header,body,footer,znacky) {
+var drawSourceMarker = function(coords,title,markerurl,header,body,footer,znacky) {
     var card = new SMap.Card();
     card.setSize(200, 300);
     var options = { 
-        "title": title
+        "title": title,
+        url:markerurl
     };
     var marker = new SMap.Marker(coords,"",options)
     card.getHeader().innerHTML=header
@@ -171,7 +181,13 @@ $(window).resize(function() {
         znacky = new SMap.Layer.Marker(); 
         for (i in sourceList) {
             source=sourceList[i];
-            drawSourceMarker(SMap.Coords.fromWGS84(source.lat,source.lon),source.label,"<b>"+source.label+"</b>",source.body,"",znacky)
+            markerUrl=SMap.CONFIG.img+"/marker/drop-red.png";
+            if (source.markerColor!==undefined) {
+                switch (source.markerColor) {
+                    case "yellow": markerUrl=SMap.CONFIG.img+"/marker/drop-yellow.png";break
+                }
+            }
+            drawSourceMarker(SMap.Coords.fromWGS84(source.lat,source.lon),source.label,markerUrl,"<b>"+source.label+"</b>",source.body,"",znacky)
         }
         mapa.addLayer(znacky)
         mapa.addLayer(vrstva);                      /* Přidat ji do mapy */
