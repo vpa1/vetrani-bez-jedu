@@ -39,7 +39,11 @@ var sourceList = [
     {lon:49.8432136,lat:18.2332742,dist:1800,color:"#996600",markerColor:"yellow",label:"Kompostárna INGEA Recyklace - zdroj zápachu",body:"\
     <b>obtěžování zápachem</b><br>\
     <a href=\"https://www.msk.cz/assets/zivotni_prostredi/ingea-recyklace----zavod-pro-zpracovani-bro.pdf\">Integrované povolení</a>\
-    "}
+    "},
+    {lon:49.7691647,lat:18.2684169,dist:2000,color:"#996600",markerColor:"yellow",label:"Průmyslová zóna Hrabová - sever - zdroj zápachu",body:"\
+    <b>obtěžování zápachem - více potenciálních zdrojů</b>"},
+    {lon:49.7585061,lat:18.2693825,dist:2000,color:"#996600",markerColor:"yellow",label:"Průmyslová zóna Hrabová - jih - zdroj zápachu",body:"\
+    <b>obtěžování zápachem - více potenciálních zdrojů</b>"}
 ]
 var currentWindData={};
 var mapa,vrstva,znacky,selectorSlider,timedisplay;
