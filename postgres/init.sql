@@ -10,6 +10,13 @@ grant all on stage to wforecast_app;
 create table forecast_table (forecast_date TIMESTAMP WITH TIME ZONE, lat FLOAT, lon FLOAT, startdate TIMESTAMP WITH TIME ZONE, wind_speed FLOAT,wind_direction FLOAT, PRIMARY KEY (forecast_date,lat,lon));
 CREATE INDEX forecast_idx ON forecast_table (lat,lon);
 
+create schema isko;
+create table isko.isko_data(observation_hour TIMESTAMP WITH TIME ZONE,station VARCHAR, pollutant VARCHAR,interval VARCHAR, val FLOAT,
+PRIMARY KEY(observation_hour,station,pollutant,interval)
+);
+
+grant all on schema isko to wforecast_app;
+grant all on isko.isko_data to wforecast_app;
 grant all on forecast_table to wforecast_app;
 
 CREATE FUNCTION fill_forecasts() RETURNS void AS $$
