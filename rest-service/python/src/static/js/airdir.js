@@ -3,46 +3,45 @@ var airdir=function() {
             event.preventDefault();
     })
 var sourceList = [
-    {lat:18.277,lon:49.858,dist:3800,color:"red",label:"Koksovna Svoboda",body:"Provozovatel: OKK Koksovny, a. s.<br>\
+    {lat:18.277,lon:49.858,dist:3800,color:"255,0,0",label:"Koksovna Svoboda",body:"Provozovatel: OKK Koksovny, a. s.<br>\
     Kapacita: 840 tis. t. CKS/rok<br>\
     Benzo(a)pyren, benzen, PAU, PM10, PM2.5, As, HCN<br>\
     <a href=\"https://www.ceskatelevize.cz/ivysilani/1095913550-nedej-se/418235100161012-jedy-z-koksaren\">Dokument ČT Jedy z koksáren</a><br>\
     <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/713760061_CZ.html\">EMIS</a><br>\
     <a href=\"https://www.msk.cz/assets/temata/ippc/files/okk-koksovny---koksovna-svoboda.pdf\">Integrované povolení</a>"},
-    {lat:18.325,lon:49.795,dist:3800,color:"red",label:"Koksovna Liberty Steel (KB1+2)",body:"Provozovatel: Liberty Ostrava, a. s.<br>\
+    {lat:18.325,lon:49.795,dist:3800,color:"255,0,0",label:"Koksovna Liberty Steel (KB1+2)",body:"Provozovatel: Liberty Ostrava, a. s.<br>\
     Kapacita: 756 tis. t CKS/rok<br>\
     Benzo(a)pyren, benzen, PAU, PM10, PM2.5, As, HCN, zápach<br>\
     <a href=\"https://ct24.ceskatelevize.cz/domaci/2782736-ostrava-nebo-otrava-bydlite-v-radvanicich-no-tak-co-chcete-rekl-lekar-zene-s\">TV reportáž</a><br>\
     <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/714220261_CZ.html\">EMIS</a><br>\
     <a href=\"https://www.msk.cz/assets/temata/ippc/files/amo---zavod-10---koksovna.pdf\">Integrované povolení</a>"},
-    {lat:18.329,lon:49.788,dist:3800,color:"red",label:"Koksovna Liberty Steel (VKB11)",body:"Provozovatel: Liberty Ostrava, a. s.<br>\
+    {lat:18.329,lon:49.788,dist:3800,color:"255,0,0",label:"Koksovna Liberty Steel (VKB11)",body:"Provozovatel: Liberty Ostrava, a. s.<br>\
     Kapacita: 775 tis. t CKS/rok<br>\
     Benzo(a)pyren, benzen, PAU, PM10, PM2.5, As, HCN, zápach<br>\
     <a href=\"https://ct24.ceskatelevize.cz/domaci/2782736-ostrava-nebo-otrava-bydlite-v-radvanicich-no-tak-co-chcete-rekl-lekar-zene-s\">TV reportáž</a><br>\
     <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/714220261_CZ.html\">EMIS</a><br>\
     <a href=\"https://www.msk.cz/assets/temata/ippc/files/amo---zavod-10---koksovna.pdf\">Integrované povolení</a>"},
-    {lat:18.2372514,lon:49.8470731,dist:2000,color:"orange",label:"BC-MCHZ - výroba velkoobjemových chemikálií",body:"Provozovatel: BorsodChem MCHZ‚ s.r.o.<br>\
-    Kapacita: 165 tis. t anilinu/rok<br>\
+    {lat:18.2372514,lon:49.8470731,dist:2000,color:"255,165,0",label:"BC-MCHZ - výroba velkoobjemových chemikálií",body:"Provozovatel: BorsodChem MCHZ‚ s.r.o.<br>\    Kapacita: 165 tis. t anilinu/rok<br>\
     Benzen, VOC, NO<sub>x</sub>, TZL, NH<sub>3</sub>, zápach<br>\
     <a href=\"https://mrak.pirati.cz/s/z43AT4swp8goLFi\">Zpráva ČHMÚ o zdrojích benzenu v Ostravě</a><br>\
     <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/713830731_CZ.html\">EMIS</a><br>\
     <a href=\"https://www.msk.cz/assets/temata/ippc/files/borsodchem---zarizeni-na-vyrobu-velkoobjemovych-chem.pdf\">Integrované povolení</a>"},
-    {lat:18.2522781,lon:49.8408575,dist:2000,color:"orange",label:"Laguny Ostramo",body:"\
+    {lat:18.2522781,lon:49.8408575,dist:2000,color:"255,165,0",label:"Laguny Ostramo",body:"\
     VOC, benzen<br>\
     <a href=\"https://mrak.pirati.cz/s/z43AT4swp8goLFi\">Zpráva ČHMÚ o zdrojích benzenu v Ostravě</a><br>\
     <a href=\"https://www.msk.cz/assets/temata/ippc/files/ave-cz---napravna-opatreni-_-laguny-ostramo.pdf\">Integrované povolení</a>"},
-    {lon:49.7142186,lat:18.2897936,dist:10800,color:"#996600",markerColor:"yellow",label:"Biocel Paskov - zdroj zápachu",body:"\
+    {lon:49.7142186,lat:18.2897936,dist:10800,color:"153,102,0",markerColor:"yellow",label:"Biocel Paskov - zdroj zápachu",body:"\
     <b>obtěžování zápachem</b>, TZL, VOC, NO<sub>x</sub>, SO<sub>2</sub><br>\
     <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/718210271_CZ.html\">EMIS</a><br>\
     <a href=\"https://www.msk.cz/assets/temata/ippc/files/biocel-paskov---vyroba-sulfitove-buniciny.pdf\">Integrované povolení</a>\
     "},
-    {lon:49.8432136,lat:18.2332742,dist:1800,color:"#996600",markerColor:"yellow",label:"Kompostárna INGEA Recyklace - zdroj zápachu",body:"\
+    {lon:49.8432136,lat:18.2332742,dist:1800,color:"153,102,0",markerColor:"yellow",label:"Kompostárna INGEA Recyklace - zdroj zápachu",body:"\
     <b>obtěžování zápachem</b><br>\
     <a href=\"https://www.msk.cz/assets/zivotni_prostredi/ingea-recyklace----zavod-pro-zpracovani-bro.pdf\">Integrované povolení</a>\
     "},
-    {lon:49.7691647,lat:18.2684169,dist:2000,color:"#996600",markerColor:"yellow",label:"Průmyslová zóna Hrabová - sever - zdroj zápachu",body:"\
+    {lon:49.7691647,lat:18.2684169,dist:2000,color:"153,102,0",markerColor:"yellow",label:"Průmyslová zóna Hrabová - sever - zdroj zápachu",body:"\
     <b>obtěžování zápachem - více potenciálních zdrojů</b>"},
-    {lon:49.7585061,lat:18.2693825,dist:2000,color:"#996600",markerColor:"yellow",label:"Průmyslová zóna Hrabová - jih - zdroj zápachu",body:"\
+    {lon:49.7585061,lat:18.2693825,dist:2000,color:"153,102,0",markerColor:"yellow",label:"Průmyslová zóna Hrabová - jih - zdroj zápachu",body:"\
     <b>obtěžování zápachem - více potenciálních zdrojů</b>"}
 ]
 var currentWindData={};
@@ -119,8 +118,8 @@ var drawSource = function (coords,range,bearing,speed,arcAngle,color) {
     ctx.lineTo(x,y) 
     
     var grad = ctx.createRadialGradient(x, y, 0, x, y, length)
-    grad.addColorStop(0,color)
-    grad.addColorStop(1,"rgba(255,0,0,0)")
+    grad.addColorStop(0,"rgba("+color+",255)")
+    grad.addColorStop(1,"rgba("+color+",0)")
     ctx.fillStyle=grad;
     ctx.fill();
 }
