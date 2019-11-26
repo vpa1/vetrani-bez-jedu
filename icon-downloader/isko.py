@@ -1,6 +1,6 @@
 import requests,psycopg2,logging
 try: 
-    aqdata=requests.get('http://portal.chmi.cz/files/portal/docs/uoco/web_generator/aqindex_cze.json').json()
+    aqdata=requests.get('http://portal.chmi.cz/files/portal/docs/uoco/web_generator/actual_hour_data_cze.json').json()
     conn = psycopg2.connect(user = "wforecast_app", password = "wfapp",
                                               host = "db",
                                               port = "5432",
