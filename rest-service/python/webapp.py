@@ -16,6 +16,18 @@ def data():
     resp = flask.make_response(jsonify(dbget.getWeatherData(lat,lon)))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
+@application.route('/pollution', methods=['GET'])
+def pollution():
+    station=0
+    pollutant=0
+    if request.args.has_key('station'): 
+        station = request.args.get('station')
+    if request.args.has_key('pollutant'): 
+        pollutant = request.args.get('pollutant')
+    resp = flask.make_response(jsonify(dbget.getIskoData(station,pollutant)))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+
 @application.route('/',methods=['GET'])
 def home():
     return render_template('/index.html')

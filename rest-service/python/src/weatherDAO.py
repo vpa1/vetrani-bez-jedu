@@ -18,6 +18,23 @@ class Dbget:
         if (self.postgreSQL_pool):
             self.postgreSQL_pool.closeall
         logging.info("PostgreSQL connection pool is closed")
+  def getIskoData(self,station,pollutant):
+    try:
+      ps_connection = self.postgreSQL_pool.getconn()
+      if(ps_connection):
+        curr = ps_connection.cursor()
+        curr.execute("select to_json(observation_hour),val from isko.isko_data where observation_hour>now() - interval '48h' and station=%s and interval='1h' and pollutant=%s",[station,pollutant])
+        records=curr.fetchall()
+        outrecs={"dates":[],"val":[]}
+        for i in records:
+          outrecs.get("dates").append(i[0])
+          outrecs.get("val").append(i[1])
+        return outrecs
+    except (Exception):
+      logging.exception("Database query failed")
+    finally:
+      self.postgreSQL_pool.putconn(ps_connection)
+
   def getWeatherData(self,lat,lon):
     lat=float(lat)
     lon=float(lon)
