@@ -214,3 +214,48 @@ background: #000000;
 input[type=range]:focus::-ms-fill-upper {
 background: #0d0d0d;
 }
+.dot {
+    text-decoration: none;
+    padding-top:0.2ex;
+    height:2.7ex;
+    width:3ex;
+    opacity: 0.9;
+    background-color: #bbb;
+    border-radius: 50%;
+    background:0.5;
+    display: inline-block;
+    text-align:center;
+  }
+.dot.aqi-1 {
+    background-color: #C7EAFB;
+}
+.dot.aqi-2 {
+    background-color: #9BD3AE;
+}
+.dot.aqi-3 {
+    background-color: #FFF200;
+}
+.dot.aqi-4 {
+    background-color: #FAA61A;
+}
+.dot.aqi-5 {
+    background-color: #ED1C24;
+}
+.dot.aqi-6 {
+    background-color: #671F20;
+}
+#infobox {
+    display:none;
+    position: absolute;
+    top:80px;
+    z-index: 12;
+    left:15px;
+    max-width:200px;
+    border:1px solid;
+    border-radius: 5px;
+    padding:3px;
+    background-color: rgba(255,255,255,0.9);
+}
+#show-pollution {
+    box-shadow: 0 0 3px 3px yellow;
+}
