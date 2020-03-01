@@ -28,6 +28,15 @@ def pollution():
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
+@application.route('/pollution_map', methods=['GET'])
+def pollutionmap():
+    station=0
+    pollutant=0
+    if request.args.has_key('pollutant'): 
+        pollutant = request.args.get('pollutant')
+    resp = flask.make_response(jsonify(dbget.getIskoMapData2(pollutant)))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 @application.route('/',methods=['GET'])
 def home():
     return render_template('/index.html')

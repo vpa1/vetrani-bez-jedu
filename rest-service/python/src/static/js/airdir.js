@@ -46,6 +46,7 @@ var sourceList = [
 ]
 var currentWindData={};
 var mapa,vrstva,znacky,selectorSlider,timedisplay;
+var aqstations;
 var drawSourceMarker = function(coords,title,markerurl,header,body,footer,znacky) {
     var card = new SMap.Card();
     card.setSize(200, 300);
@@ -71,7 +72,112 @@ var getForecastPoints = function() {
     //ask for forecast on all node points and fill them in cacheable structure
     //applyforecastdata then should apply structure and draw all the sources
 }
-var getForecastData = function (forecastHour) {
+var pollutionCache=null;
+var pollutionLastReq=null;
+var loadPollutionMapData = function(aqstations,refdate,callback) {
+    var fetchNew=false;
+    if (pollutionCache!==null) {
+        var keys = Object.keys(pollutionCache).sort();
+        var dateDif=new Date()-new Date(keys[keys.length-1]);
+        var delayFetch=false;
+        if (pollutionLastReq!=null && ((new Date()-pollutionLastReq<=30000))) {
+            delayFetch=true;
+        }
+        if (dateDif<(1*3600*1000) || delayFetch){//use cached value when oldest data younger than two hours
+            callback(aqstations,refdate,pollutionCache)
+        }
+        else {fetchNew=true}
+    }
+    if ((pollutionCache==null) || fetchNew) {
+    pollutionLastReq=new Date();
+    return(jQuery.getJSON("pollution_map?pollutant=PM10").then(function (data) {
+        //call the drawing logic
+        var newdata ={};
+        var keysList = Object.keys(data);
+        for (i in keysList) {
+            newdata[(new Date(keysList[i])).toISOString()]=data[keysList[i]];
+        }
+        callback(aqstations,refdate,newdata)
+        pollutionCache=newdata;
+    }))}
+}
+var pollutionStations=null;
+var loadPollutionStations = function(callback) {
+    if (pollutionStations==null) {
+       return(jQuery.getJSON("static/json/aqstations.json").then(function(data){
+           callback(data);
+           pollutionStations=data;
+       }))
+    }
+    else {
+        callback(pollutionStations);
+    }
+}
+var plotAQStation = function(code,lat,lon,value){
+    var domObj = $("<a class=\"dot\" href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/aqindex_slide3/mp_"+code+"_CZ.html\" target=\"_new\"></a>")//markers shoult be somewhere linked by station id to be replaceable
+    if (value == "") {
+        domObj.addClass("aqi-unknown");
+    }
+    else if (value!="" && value<=20) {
+        domObj.addClass("aqi-1");
+    }
+    else if (value<=40) {
+        domObj.addClass("aqi-2");
+    }
+    else if (value<=70) {
+        domObj.addClass("aqi-3");
+    }
+    else if (value<=90) {
+        domObj.addClass("aqi-4");
+    }
+    else if (value<=180) {
+        domObj.addClass("aqi-5");
+    }
+    else {
+        domObj.addClass("aqi-6");
+    }
+    if (value!="") {
+        domObj.text(Math.round(value));
+    }
+    var options = {
+        url:domObj[0],
+        title:"PM10 - "+code
+    }
+    var marker = new SMap.Marker(SMap.Coords.fromWGS84(lon,lat),"marker-"+code,options);
+    stationMarkers.addMarker(marker);
+}
+var plotPollutionMapData = function(aqstations,refdate,dataobject) {//here be the drawing logic
+    stationMarkers.removeAll();
+    var stationCodes = Object.keys(aqstations);
+    var datekeys = Object.keys(dataobject).sort();
+    if (refdate <= new Date(datekeys[datekeys.length-1])) {//in measured data
+        $("#infobox").show();
+        $("#infobox").html("Naměřené koncentrace PM<sub>10</sub>");
+    }
+    else {
+        $("#infobox").hide();
+        $("#infobox").html("");
+    }
+   // stationMarkers.removeAll();
+        for (i in stationCodes) {
+            var j = stationCodes[i];
+            if ((dataobject[refdate.toISOString()]!==undefined) && (dataobject[refdate.toISOString()][j]!==undefined)){
+                plotAQStation(j,aqstations[j].lat,aqstations[j].lon,dataobject[refdate.toISOString()][j]);
+            }
+            else {
+                plotAQStation(j,aqstations[j].lat,aqstations[j].lon,"");
+            }
+        }
+}
+var shiftToPollutionData = function() {
+    var keys = Object.keys(pollutionCache);
+    var dateDif = new Date(keys[keys.length-1])-forecastRefDate;
+    var targetForecastHour = Math.floor(dateDif/60000/60);
+    if (selectorSlider.val()>targetForecastHour) {
+        getForecastData(targetForecastHour,true);
+    }
+}
+var getForecastData = function (forecastHour,shiftSlider) {
     if (!$.isEmptyObject(cacheddata)) {
         forecastRefDate=new Date(cacheddata.latestforecast)
         var dateDif = new Date()-forecastRefDate;
@@ -93,12 +199,12 @@ var getForecastData = function (forecastHour) {
              })()
         };
         jQuery.when.apply($,defereds).then(function() {//When everything downloaded, we can apply
-            applyForecastData(dataobj,forecastHour)
+            applyForecastData(dataobj,forecastHour,shiftSlider)
             cacheddata=dataobj
         })
     }
     else {
-            applyForecastData(cacheddata,forecastHour);
+            applyForecastData(cacheddata,forecastHour,shiftSlider);
 
     }
 }
@@ -152,6 +258,10 @@ var redrawfunc=function(full){
     drawSource(source5,2000,winddir,windspeed,15,"orange");
     drawSource(source6,2000,winddir,windspeed,15,"orange");*/
     //drawSource(source3,10000,189,15,"orange");
+    if (stationMarkers.isActive()) {
+        stationMarkers.disable()
+        stationMarkers.enable()
+    }
 }
 var loadContent = function(filename) {
     jQuery.get("static/"+filename).then(function(data){
@@ -182,6 +292,8 @@ $(window).resize(function() {
 		mapa.addDefaultControls();	     
         vrstva = new SMap.Layer.Canvas(0,0);
         znacky = new SMap.Layer.Marker(); 
+        stationMarkers = new SMap.Layer.Marker(); 
+        stationMarkers.setCopyright({"0-":"ČHMÚ"});
         for (i in sourceList) {
             source=sourceList[i];
             markerUrl=SMap.CONFIG.img+"/marker/drop-red.png";
@@ -192,17 +304,20 @@ $(window).resize(function() {
             }
             drawSourceMarker(SMap.Coords.fromWGS84(source.lat,source.lon),source.label,markerUrl,"<b>"+source.label+"</b>",source.body,"",znacky)
         }
+        
         mapa.addLayer(znacky)
+        mapa.addLayer(stationMarkers)
         mapa.addLayer(vrstva);                      /* Přidat ji do mapy */
         timedisplay=$("#time-display")
         selectorSlider = $('#time-selector');
         selectorSlider.on('input',function(event) {
-            getForecastData(parseInt(selectorSlider.val()));
+            getForecastData(parseInt(selectorSlider.val()),false);
         })
         vrstva.enable(); 
         vrstva.redraw=redrawfunc;
         znacky.enable();
-        getForecastData();
+        stationMarkers.enable();
+        getForecastData(null,true);
         vrstva.redraw()
     
     
@@ -218,12 +333,16 @@ $(document).on('touchend',function() {
     window.setTimeout(function() {vrstva.redraw()},500)
 })
 $("#back-button").click(function() {
-    getForecastData(null);
+    getForecastData(null,true);
 })
 $("#content-buttons a").click(function(e) {
     if ($(e.delegateTarget).data("content") !== undefined) {
         loadContent($(e.delegateTarget).data("content"))
     }
+    if ($(e.delegateTarget).data("action") !== undefined && $(e.delegateTarget).data("action")=="show-pollution") {
+        shiftToPollutionData();
+    }
+
 })
 $("#content-close a").click(function() {
     closeContent()
@@ -255,7 +374,7 @@ $(document).keyup(function(event){
           }
           return daystr;
         }
-        var applyForecastData = function(data,forecastHour) {
+        var applyForecastData = function(data,forecastHour,shiftSlider) {
                 forecastRefDate=new Date(data.refdate)
                 if (forecastHour==null) {
                     var dateDif = new Date()-forecastRefDate;
@@ -268,9 +387,11 @@ $(document).keyup(function(event){
                         var windspeed=value.speed[currentForecastHour]
                         currentWindData[key]={"speed":windspeed,"direction":winddir}
                     })
-                   
-                    selectorSlider.val(currentForecastHour);
+                    
                     forecastHour=currentForecastHour;
+                }
+                if (shiftSlider) {
+                     selectorSlider.val(forecastHour);
                 }
                 Object.keys(data).forEach(function(key) {
                         if (key=="latestforecast"){return;}
@@ -281,10 +402,21 @@ $(document).keyup(function(event){
                     currentWindData[key]={"speed":windspeed,"direction":winddir}
                     selectorSlider.attr("max",value.speed.length-1)
                 })
+                stationMarkers.enable();
+                var dateDif = new Date()-forecastRefDate;
+                var currentForecastHour = Math.floor(dateDif/60000/60);
+                if (forecastHour>=currentForecastHour) {
+                    stationMarkers.disable();
+                }
+                forecastRefDate=new Date(data.refdate)
                 var forecastDate=new Date(forecastRefDate);
                 forecastDate.setHours(forecastRefDate.getHours()+forecastHour)
+                loadPollutionStations(function(aqstations) {
+                loadPollutionMapData(aqstations,forecastDate,plotPollutionMapData);
+                 })
 		        var daystr=getDayStr(forecastDate);
-		        timedisplay.html(daystr+"<br> "+forecastDate.getHours()+ ":00");
+                timedisplay.html(daystr+"<br> "+forecastDate.getHours()+ ":00");
+                
                 vrstva.redraw()
         }
 $(window).resize();

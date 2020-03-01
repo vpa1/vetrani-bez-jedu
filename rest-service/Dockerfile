@@ -3,6 +3,7 @@ RUN apt-get -y update && apt-get install -y python python-flask python-psycopg2 
 COPY python/src/static/* /opt/weather-rest/static/
 COPY python/src/static/css/* /opt/weather-rest/static/css/
 COPY python/src/static/js/* /opt/weather-rest/static/js/
+COPY python/src/static/json/* /opt/weather-rest/static/json/
 COPY python/src/static/webfonts/* /opt/weather-rest/static/webfonts/
 COPY python/webapp.py /opt/weather-rest/
 COPY python/src/weatherDAO.py python/src/__init__.py /opt/weather-rest/src/ 

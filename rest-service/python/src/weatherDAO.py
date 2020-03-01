@@ -35,6 +35,26 @@ class Dbget:
     finally:
       self.postgreSQL_pool.putconn(ps_connection)
 
+  def getIskoMapData2(self,pollutant):
+    try:
+      ps_connection = self.postgreSQL_pool.getconn()
+      outrecs={}
+      if(ps_connection):
+        curr = ps_connection.cursor()
+        curr.execute("select to_json(inp.obs) from (select distinct(observation_hour) as obs from isko.isko_data order by observation_hour desc limit 13) inp")
+        hours=curr.fetchall()
+        for i in hours:
+          hour = i[0]
+          curr.execute("select station,val from isko.isko_data where observation_hour=%s and pollutant=%s and interval='1h'",[hour,pollutant])
+          records=curr.fetchall()
+          outrecs[hour]={}
+          for i in records:
+            outrecs.get(hour)[i[0]]=i[1]
+        return outrecs
+    except (Exception):
+      logging.exception("Database query failed")
+    finally:
+      self.postgreSQL_pool.putconn(ps_connection)
   def getWeatherData(self,lat,lon):
     lat=float(lat)
     lon=float(lon)
