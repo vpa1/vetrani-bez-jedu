@@ -26,10 +26,6 @@ var sourceList = [
     <a href=\"https://mrak.pirati.cz/s/z43AT4swp8goLFi\">Zpráva ČHMÚ o zdrojích benzenu v Ostravě</a><br>\
     <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/713830731_CZ.html\">EMIS</a><br>\
     <a href=\"https://www.msk.cz/assets/temata/ippc/files/borsodchem---zarizeni-na-vyrobu-velkoobjemovych-chem.pdf\">Integrované povolení</a>"},
-    {lat:18.2522781,lon:49.8408575,dist:2000,color:"255,165,0",label:"Laguny Ostramo",body:"\
-    VOC, benzen<br>\
-    <a href=\"https://mrak.pirati.cz/s/z43AT4swp8goLFi\">Zpráva ČHMÚ o zdrojích benzenu v Ostravě</a><br>\
-    <a href=\"https://www.msk.cz/assets/temata/ippc/files/ave-cz---napravna-opatreni-_-laguny-ostramo.pdf\">Integrované povolení</a>"},
     {lon:49.7142186,lat:18.2897936,dist:10800,color:"153,102,0",markerColor:"yellow",label:"Biocel Paskov - zdroj zápachu",body:"\
     <b>obtěžování zápachem</b>, TZL, VOC, NO<sub>x</sub>, SO<sub>2</sub><br>\
     <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/718210271_CZ.html\">EMIS</a><br>\
