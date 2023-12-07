@@ -15,12 +15,6 @@ var sourceList = [
     <a href=\"https://ct24.ceskatelevize.cz/domaci/2782736-ostrava-nebo-otrava-bydlite-v-radvanicich-no-tak-co-chcete-rekl-lekar-zene-s\">TV reportáž</a><br>\
     <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/714220261_CZ.html\">EMIS</a><br>\
     <a href=\"https://www.msk.cz/assets/temata/ippc/files/amo---zavod-10---koksovna.pdf\">Integrované povolení</a>"},
-    {lat:18.329,lon:49.788,dist:3800,color:"255,0,0",label:"Koksovna Liberty Steel (VKB11)",body:"Provozovatel: Liberty Ostrava, a. s.<br>\
-    Kapacita: 775 tis. t CKS/rok<br>\
-    Benzo(a)pyren, benzen, PAU, PM10, PM2.5, As, HCN, zápach<br>\
-    <a href=\"https://ct24.ceskatelevize.cz/domaci/2782736-ostrava-nebo-otrava-bydlite-v-radvanicich-no-tak-co-chcete-rekl-lekar-zene-s\">TV reportáž</a><br>\
-    <a href=\"http://portal.chmi.cz/files/portal/docs/uoco/web_generator/plants/CZ080/714220261_CZ.html\">EMIS</a><br>\
-    <a href=\"https://www.msk.cz/assets/temata/ippc/files/amo---zavod-10---koksovna.pdf\">Integrované povolení</a>"},
     {lat:18.2372514,lon:49.8470731,dist:2000,color:"255,165,0",label:"BC-MCHZ - výroba velkoobjemových chemikálií",body:"Provozovatel: BorsodChem MCHZ‚ s.r.o.<br>\    Kapacita: 165 tis. t anilinu/rok<br>\
     Benzen, VOC, NO<sub>x</sub>, TZL, NH<sub>3</sub>, zápach<br>\
     <a href=\"https://mrak.pirati.cz/s/z43AT4swp8goLFi\">Zpráva ČHMÚ o zdrojích benzenu v Ostravě</a><br>\
